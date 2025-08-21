@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
   const navigate = useNavigate();
   return (
-    <section className="relative min-h-screen h-screen flex items-end justify-start bg-black overflow-hidden">
+    <section
+      className="relative flex items-end justify-start bg-black overflow-hidden"
+      style={{ height: "100dvh" }}
+    >
+      {" "}
       {/* Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
