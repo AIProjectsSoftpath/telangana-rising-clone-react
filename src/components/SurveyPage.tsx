@@ -2,10 +2,7 @@ import React from "react";
 
 const SurveyPage = () => {
   return (
-    <div
-      className="min-h-screen bg-primary py-10 px-4 flex flex-col items-center"
-      style={{ marginTop: "7rem" }}
-    >
+    <div className="min-h-screen bg-primary py-10 px-4 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-8 text-primary">
         Telangana Rising 2047 Survey
       </h1>

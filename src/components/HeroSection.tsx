@@ -1,4 +1,4 @@
-import logoElement from "@/assets/logo-element.png";
+import logoElement from "/telangana-rising-logo.png";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
