@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Target, Building2, DollarSign } from "lucide-react";
 
 const VisionSection = () => {
@@ -7,21 +13,24 @@ const VisionSection = () => {
     {
       icon: Target,
       title: "TelanganaRising",
-      description: "A committed Chief Minister's resolute promise and ambitious goal to turn people's aspirations into reality by 2047",
-      action: () => alert('TelanganaRising page')
+      description:
+        "A committed Chief Minister's resolute promise and ambitious goal to turn people's aspirations into reality by 2047",
+      action: () => alert("TelanganaRising page"),
     },
     {
       icon: Building2,
-      title: "HyderabadRising", 
-      description: "Transform Hyderabad into the Bluest, Greenest, Cleanest, Fastest, Safest, Net Zero, Opportunity City by 2047",
-      action: () => alert('HyderabadRising page')
+      title: "HyderabadRising",
+      description:
+        "Transform Hyderabad into the Bluest, Greenest, Cleanest, Fastest, Safest, Net Zero, Opportunity City by 2047",
+      action: () => alert("HyderabadRising page"),
     },
     {
       icon: DollarSign,
-      title: "$3 Trillion Goal",
-      description: "An ambition to grow Telangana's economy to $1 Trillion State GDP by 2030 and $3 Trillion by 2047",
-      action: () => alert('$3 Trillion Goal page')
-    }
+      title: "$300 Trillion Goal",
+      description:
+        "An ambition to grow Telangana's economy to $1 Trillion State GDP by 2030 and $3 Trillion by 2047",
+      action: () => alert("$3 Trillion Goal page"),
+    },
   ];
 
   return (
@@ -33,9 +42,10 @@ const VisionSection = () => {
               Vision for Telangana
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Governance is all about finding the perfect balance between economic growth and welfare. 
-              We must grow the economy not as an end in itself but for the social impact it can help 
-              the government and society create.
+              Governance is all about finding the perfect balance between
+              economic growth and welfare. We must grow the economy not as an
+              end in itself but for the social impact it can help the government
+              and society create.
             </p>
           </div>
 
@@ -43,7 +53,10 @@ const VisionSection = () => {
             {visionCards.map((card, index) => {
               const IconComponent = card.icon;
               return (
-                <Card key={index} className="text-center border-none gov-shadow hover:scale-105 smooth-transition bg-card/80 backdrop-blur-sm">
+                <Card
+                  key={index}
+                  className="text-center border-none gov-shadow hover:scale-105 smooth-transition bg-card/80 backdrop-blur-sm"
+                >
                   <CardHeader>
                     <div className="mx-auto w-16 h-16 bg-accent rounded-full flex items-center justify-center mb-4">
                       <IconComponent className="h-8 w-8 text-accent-foreground" />
@@ -56,8 +69,8 @@ const VisionSection = () => {
                     <CardDescription className="text-base leading-relaxed">
                       {card.description}
                     </CardDescription>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="border-accent text-accent hover:bg-accent hover:text-accent-foreground smooth-transition"
                       onClick={card.action}
                     >
