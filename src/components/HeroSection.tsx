@@ -24,14 +24,15 @@ const HeroSection = () => {
         }}
       />
       {/* Content */}
-      <div className="relative z-20 container mx-auto px-4 pb-8 text-left text-primary-foreground flex flex-col items-start">
-        <div className="flex items-center mb-4">
+      <div className="relative z-20 container mx-auto px-4 pb-8 text-left text-primary-foreground flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-0">
+        {/* Logo + Title + Button Wrapper */}
+        <div className="flex flex-col md:flex-row md:items-center">
           <img
             src={logoElement}
             alt="Telangana Rising Logo"
-            className="h-10 w-10 mr-3"
+            className="h-10 w-10 mr-3 mb-3 md:mb-0"
           />
-          <h1 className="hero-text text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mr-4">
+          <h1 className="hero-text text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-3 md:mb-0 md:mr-4">
             TELANGANA RISING 2047
           </h1>
           <button

@@ -9,7 +9,7 @@ const SurveyPage = () => {
       <h1 className="text-3xl font-bold mb-8 text-primary">
         Telangana Rising 2047 Survey
       </h1>
-      <form className="w-full max-w-2xl bg-gray-50 p-8 rounded shadow-md space-y-6 mt-8">
+      <form className="w-full max-w-2xl bg-gray-50 p-8 rounded shadow-md space-y-6">
         {/* Name as per Aadhaar card */}
         <div>
           <label className="block font-semibold mb-1" htmlFor="aadhaarName">

@@ -141,7 +141,7 @@ const Header = () => {
           </nav>
 
           {/* Language Toggle & Profile */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4 lg:visible">
             <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
@@ -162,7 +162,16 @@ const Header = () => {
             <img
               src="/telangana-govt-logo.png"
               alt="Telangana Govt Logo"
-              className="h-20 w-auto ml-8"
+              className="h-20 w-auto ml-8 hidden lg:block"
+              style={{ background: "transparent" }}
+            />
+          </div>
+          {/* Mobile Telangana Logo */}
+          <div className="flex lg:hidden items-center">
+            <img
+              src="/telangana-govt-logo.png"
+              alt="Telangana Govt Logo"
+              className="h-12 w-auto ml-2"
               style={{ background: "transparent" }}
             />
           </div>
