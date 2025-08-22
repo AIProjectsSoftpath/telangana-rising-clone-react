@@ -1,145 +1,183 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
+
+interface SurveyResponse {
+  phone: string;
+  timestamp: string;
+  answers: { [key: string]: { option: string; priority?: string } };
+}
+
+// ✅ Mapping of question codes → full questions
+const questionMap: { [key: string]: string } = {
+  q1: "How satisfied are you with government services?",
+  q2: "How do you rate the quality of infrastructure in your area?",
+  q3: "Which sector do you think should be prioritized for Telangana's growth?",
+  q4: "How satisfied are you with agricultural support programs?",
+  q5: "Which area in agriculture needs the most improvement?",
+  q6: "Do you think education reforms are meeting expectations?",
+  q7: "Which educational initiative is most important to you?",
+  q8: "How do you rate current healthcare services?",
+  q9: "What should be the top healthcare priority?",
+};
 
 const Dashboard: React.FC = () => {
-  const [summaryData, setSummaryData] = useState<any>(null);
-  const COLORS = ["#0d6efd", "#6610f2", "#198754", "#dc3545", "#ffc107"];
+  const [responses, setResponses] = useState<SurveyResponse[]>([]);
+  const [selectedResponse, setSelectedResponse] =
+    useState<SurveyResponse | null>(null);
 
-  // Simulate API call
+  // Simulate API call (replace with actual backend later)
   useEffect(() => {
     setTimeout(() => {
-      setSummaryData({
-        totalResponses: 1245,
-        sectionSummary: {
-          topPriority: "Transparency & Accountability",
-          lastSubmission: new Date().toISOString(),
-          data: [
-            { section: "Governance", responses: 320 },
-            { section: "Economy", responses: 250 },
-            { section: "Agriculture", responses: 200 },
-            { section: "Education", responses: 180 },
-            { section: "Healthcare", responses: 295 },
-          ],
+      setResponses([
+        {
+          phone: "9876543210",
+          timestamp: "2025-08-22 10:30 AM",
+          answers: {
+            q1: { option: "Satisfied", priority: "2" },
+            q3: { option: "IT & emerging technologies", priority: "1" },
+            q5: { option: "Crop insurance & risk coverage", priority: "3" },
+            q7: {
+              option: "Vocational training & skill development",
+              priority: "2",
+            },
+            q9: { option: "Preventive healthcare & awareness", priority: "1" },
+          },
         },
-        questionBreakdown: {
-          "Q1: Digital Services": [
-            { option: "Very Satisfied", count: 400 },
-            { option: "Satisfied", count: 300 },
-            { option: "Neutral", count: 250 },
-            { option: "Dissatisfied", count: 180 },
-            { option: "Highly Dissatisfied", count: 115 },
-          ],
-          "Q3: Growth Focus": [
-            { option: "Agriculture", count: 200 },
-            { option: "Manufacturing", count: 220 },
-            { option: "IT", count: 300 },
-            { option: "Tourism", count: 150 },
-            { option: "Startups", count: 180 },
-          ],
+        {
+          phone: "9123456789",
+          timestamp: "2025-08-22 11:15 AM",
+          answers: {
+            q1: { option: "Very Satisfied", priority: "1" },
+            q3: { option: "Startups & entrepreneurship", priority: "2" },
+            q5: { option: "Irrigation & water management", priority: "1" },
+            q7: {
+              option: "Digital classrooms & online learning",
+              priority: "3",
+            },
+            q9: {
+              option: "Affordable treatment in government hospitals",
+              priority: "2",
+            },
+          },
         },
-      });
-    }, 1500);
+      ]);
+    }, 1000);
   }, []);
-
-  if (!summaryData) {
-    return (
-      <div className="text-center mt-5">
-        <div className="spinner-border text-primary"></div>
-        <p>Loading Dashboard...</p>
-      </div>
-    );
-  }
-
-  const { totalResponses, sectionSummary, questionBreakdown } = summaryData;
 
   return (
     <div
-      className="container-fluid p-4"
+      className="container py-5 mt-20"
       style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
     >
-      {/* Header */}
-      <div className="bg-primary text-white p-4 rounded mb-4 shadow">
-        <h2 className="text-center">Survey Dashboard: Telangana Rising 2047</h2>
-        <p className="text-center mb-0 fs-5">
-          Total Responses: <strong>{totalResponses}</strong>
+      {/* Header Banner */}
+      <div className="bg-primary text-white p-4 rounded mb-4 shadow text-center">
+        <h2>Survey Dashboard: Telangana Rising 2047</h2>
+        <p className="fs-5 mb-0">
+          Total Responses: <strong>{responses.length}</strong>
         </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="row mb-4">
-        <div className="col-md-4">
-          <div className="card text-center shadow p-3">
-            <h5>Total Responses</h5>
-            <h2 className="text-primary">{totalResponses}</h2>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div className="card text-center shadow p-3">
-            <h5>Top Priority</h5>
-            <p className="text-success fw-bold">{sectionSummary.topPriority}</p>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div className="card text-center shadow p-3">
-            <h5>Last Submission</h5>
-            <p>{new Date(sectionSummary.lastSubmission).toLocaleString()}</p>
-          </div>
+      {/* Responses Table */}
+      <div className="card shadow-sm">
+        <div className="card-header bg-light fw-bold">Survey Submissions</div>
+        <div className="card-body p-0">
+          <table className="table table-hover mb-0">
+            <thead className="table-primary">
+              <tr>
+                <th>Phone Number</th>
+                <th>Submitted At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {responses.map((res, idx) => (
+                <tr
+                  key={idx}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setSelectedResponse(res)}
+                >
+                  <td>{res.phone}</td>
+                  <td>{res.timestamp}</td>
+                </tr>
+              ))}
+              {responses.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="text-center p-3">
+                    Loading responses...
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* Section-wise Bar Chart */}
-      <div className="card p-4 mb-4 shadow">
-        <h4 className="text-primary mb-3">Section-wise Responses</h4>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={sectionSummary.data}>
-            <XAxis dataKey="section" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="responses" fill="#0d6efd" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      {/* Modal for Full Survey */}
+      {selectedResponse && (
+        <div className="modal show" style={{ display: "block" }}>
+          <div className="modal-dialog modal-lg modal-dialog-scrollable">
+            <div className="modal-content shadow-lg border-0 rounded-3">
+              {/* Header */}
+              <div className="modal-header bg-primary text-white">
+                <h5 className="modal-title">Survey Response</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setSelectedResponse(null)}
+                ></button>
+              </div>
 
-      {/* Question-wise Pie Charts */}
-      <div className="row">
-        {Object.keys(questionBreakdown).map((qKey, index) => (
-          <div className="col-md-6 mb-4" key={index}>
-            <div className="card p-3 shadow">
-              <h6 className="text-primary">{qKey}</h6>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={questionBreakdown[qKey]}
-                    dataKey="count"
-                    nameKey="option"
-                    outerRadius={80}
-                    fill="#0d6efd"
-                    label
-                  >
-                    {questionBreakdown[qKey].map((_, i) => (
-                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
+              {/* Body */}
+              <div className="modal-body bg-light">
+                <p className="mb-2">
+                  <strong>📞 Phone:</strong> {selectedResponse.phone}
+                </p>
+                <p className="mb-3">
+                  <strong>🕒 Submitted At:</strong> {selectedResponse.timestamp}
+                </p>
+                <hr />
+                {Object.entries(selectedResponse.answers).map(
+                  ([q, ans], idx) => (
+                    <div
+                      key={idx}
+                      className="mb-3 p-3 bg-white rounded shadow-sm"
+                    >
+                      <h6 className="fw-bold text-primary">
+                        {q.toUpperCase()} :{" "}
+                        {questionMap[q] || "Unknown Question"}
+                      </h6>
+                      <p className="mb-1">
+                        Answer: <strong>{ans.option}</strong>
+                      </p>
+                      {ans.priority && (
+                        <p className="text-muted small">
+                          Priority: {ans.priority}
+                        </p>
+                      )}
+                    </div>
+                  )
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setSelectedResponse(null)}
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Backdrop (lighter instead of full dark) */}
+          <div
+            className="modal-backdrop show"
+            style={{ backgroundColor: "rgba(0,0,0,0.3)" }}
+            onClick={() => setSelectedResponse(null)}
+          ></div>
+        </div>
+      )}
     </div>
   );
 };

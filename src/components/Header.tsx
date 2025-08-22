@@ -18,11 +18,12 @@ const Header = () => {
 
   // ✅ Check if current page is Survey Page
   const isSurveyPage = location.pathname === "/survey";
+  const isDashboardPage = location.pathname === "/dashboard";
 
   return (
     <header
       className={`absolute top-0 left-0 w-full z-50 border-none shadow-none transition-colors duration-300 ${
-        isSurveyPage ? "bg-primary" : "bg-transparent"
+        isSurveyPage || isDashboardPage ? "bg-primary" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -42,7 +43,10 @@ const Header = () => {
             <Button
               variant="ghost"
               className="text-primary-foreground hover:bg-primary-foreground/10"
-              onClick={() => (window.location.href = "/")}
+              onClick={() =>
+                (window.location.href =
+                  "https://softpathtechnologies.com/raising/#")
+              }
             >
               Home
             </Button>
