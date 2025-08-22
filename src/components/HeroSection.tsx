@@ -12,7 +12,7 @@ const HeroSection = () => {
       {/* Video Background */}
       <video
         className="absolute inset-0 w-full h-full object-cover z-0"
-        src="https://telanganarising2047.org/wp-content/themes/telangana/assets/images/tgvideo.mp4"
+        src="/slide1.mp4"
         autoPlay
         loop
         muted
