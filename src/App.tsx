@@ -15,14 +15,12 @@ const App = () => (
     <TooltipProvider>
       {/* <Toaster />
       <Sonner /> */}
-      <BrowserRouter>
+      <BrowserRouter basename="/telangana-rising-clone-react">
         <Header />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<SurveyPage />} />
           <Route path="/survey" element={<SurveyPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

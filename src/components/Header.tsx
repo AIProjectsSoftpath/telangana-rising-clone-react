@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu, X } from "lucide-react";
+import logoElement from "/telangana-rising-logo.png";
+import govtLogo from "/telangana-govt-logo.png"; // Adjust the path as necessary
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -23,7 +25,7 @@ const Header = () => {
   return (
     <header
       className={`absolute top-0 left-0 w-full z-50 border-none shadow-none transition-colors duration-300 ${
-        isSurveyPage || isDashboardPage ? "bg-primary" : "bg-transparent"
+        isSurveyPage || isDashboardPage ? "bg-primary" : "bg-primary"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -31,10 +33,9 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-4">
             <img
-              src="/telangana-rising-logo.png"
-              alt="Telangana Rising 2047 Logo"
-              className="h-28 w-auto opacity-80"
-              style={{ background: "transparent" }}
+              src={govtLogo}
+              alt="Telangana Rising Logo"
+              className="h-20 w-auto object-contain" // 👈 bigger, keeps aspect ratio
             />
           </div>
 
@@ -45,13 +46,24 @@ const Header = () => {
               className="text-primary-foreground hover:bg-primary-foreground/10"
               onClick={() =>
                 (window.location.href =
-                  "https://softpathtechnologies.com/raising/#")
+                  "https://softpathtechnologies.com/rising/")
               }
             >
               Home
             </Button>
 
-            <div className="relative">
+            {/* <Button
+              variant="ghost"
+              className="text-primary-foreground hover:bg-primary-foreground/10"
+              onClick={() =>
+                (window.location.href =
+                  "https://aiprojectssoftpath.github.io/telangana-rising-clone-react/dashboard")
+              }
+            >
+              Dashboard
+            </Button> */}
+
+            {/* <div className="relative">
               <Button
                 variant="ghost"
                 className="text-primary-foreground hover:bg-primary-foreground/10 flex items-center"
@@ -141,12 +153,12 @@ const Header = () => {
               onClick={() => alert("Stories page")}
             >
               Stories
-            </Button>
+            </Button> */}
           </nav>
 
           {/* Language Toggle & Profile */}
           <div className="hidden lg:flex items-center space-x-4 lg:visible">
-            <div className="flex items-center space-x-2">
+            {/* <div className="flex items-center space-x-2">
               <Button
                 variant="ghost"
                 size="sm"
@@ -162,21 +174,23 @@ const Header = () => {
               >
                 TE
               </Button>
+            </div> */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-center bg-white rounded-full h-20 w-20 shadow">
+                <img
+                  src={logoElement}
+                  alt="Telangana Govt Logo"
+                  className="h-14 w-14 object-contain"
+                />
+              </div>
             </div>
-            <img
-              src="/telangana-govt-logo.png"
-              alt="Telangana Govt Logo"
-              className="h-20 w-auto ml-8 hidden lg:block"
-              style={{ background: "transparent" }}
-            />
           </div>
           {/* Mobile Telangana Logo */}
-          <div className="flex lg:hidden items-center">
+          <div className="flex lg:hidden items-center space-x-4">
             <img
-              src="/telangana-govt-logo.png"
+              src={logoElement}
               alt="Telangana Govt Logo"
-              className="h-12 w-auto ml-2"
-              style={{ background: "transparent" }}
+              className="h-10 max-h-10 w-auto object-contain"
             />
           </div>
 

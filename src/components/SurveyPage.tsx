@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import captchaImage from "/captcha.png"; // Adjust the path as necessary
 
 const SurveyPage: React.FC = () => {
   const [captchaInput, setCaptchaInput] = useState("");
@@ -8,8 +9,12 @@ const SurveyPage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [isError, setIsError] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [formData, setFormData] = useState<{ [key: string]: string }>({
+  const [formData, setFormData] = useState({
     phone: "",
+    answers: [] as {
+      question_id: string;
+      answers: { text: string; priority: number }[];
+    }[],
   });
   // Generate random captcha
   function generateCaptcha() {
@@ -42,7 +47,7 @@ const SurveyPage: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // ✅ Phone validation
@@ -60,10 +65,54 @@ const SurveyPage: React.FC = () => {
       return;
     }
 
-    setModalMessage("Thank you for your response!");
-    setIsError(false);
-    setShowModal(true);
-    console.log("Survey Data:", formData);
+    try {
+      // Construct payload
+      const payload = {
+        mobile_no: formData.phone,
+        answers: formData.answers.map((q: any) => ({
+          question_id: q.question_id,
+          answers: q.answers.map((a: any, index: number) => ({
+            text: a.text,
+            priority: a.priority ?? index + 1, // ensure priority
+          })),
+        })),
+      };
+
+      console.log("📤 Sending Payload:", payload);
+
+      const response = await fetch(
+        "https://softpathtechnologies.com/vmsdemo/api/v1/answerdata",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      console.log("✅ API Response:", result);
+      setFormData({
+        phone: "",
+        answers: [],
+      });
+      setCaptcha(generateCaptcha());
+      setCaptchaInput("");
+      setModalMessage("Thank you for your response!");
+      setIsError(false);
+      setShowModal(true);
+    } catch (error) {
+      console.error("❌ Error submitting survey:", error);
+      setModalMessage("Something went wrong. Please try again later.");
+      setIsError(true);
+      setShowModal(true);
+    }
   };
 
   // Get all used priorities for current question
@@ -79,13 +128,12 @@ const SurveyPage: React.FC = () => {
   const questions = [
     {
       name: "q1",
-      text: "How satisfied are you with the government’s digital services (MeeSeva, online portals, mobile apps)?",
+      text: "What should be the top priority for governance by 2047?",
       options: [
-        "Very Satisfied",
-        "Satisfied",
-        "Neutral",
-        "Dissatisfied",
-        "Highly Dissatisfied",
+        "Transparency & accountability",
+        "Fast digital services",
+        "Corruption-free administration",
+        "People participation in decision-making",
       ],
     },
     {
@@ -176,6 +224,7 @@ const SurveyPage: React.FC = () => {
               <label className="fw-bold">
                 {idx + 1}. {q.text}
               </label>
+
               {q.options.map((opt, optIndex) => {
                 const questionName = q.name;
                 const priorities = Array.from(
@@ -184,19 +233,16 @@ const SurveyPage: React.FC = () => {
                 );
                 const usedPriorities = getUsedPriorities(questionName);
 
+                // ✅ Generate letter A, B, C, ...
+                const optionLetter = String.fromCharCode(65 + optIndex);
+
                 return (
                   <div
                     key={opt}
                     className="d-flex align-items-center justify-content-between mb-2"
                   >
                     <div className="d-flex align-items-center">
-                      <input
-                        className="form-check-input me-2"
-                        type="radio"
-                        name={questionName}
-                        value={opt}
-                        onChange={handleChange}
-                      />
+                      <span className="fw-bold me-2">{optionLetter}.</span>
                       <label className="form-check-label">{opt}</label>
                     </div>
 
@@ -231,6 +277,23 @@ const SurveyPage: React.FC = () => {
                   </div>
                 );
               })}
+
+              {/* ✅ Reset Button aligned under dropdowns */}
+              <div className="text-end mt-2">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-primary"
+                  onClick={() => {
+                    const updatedFormData = { ...formData };
+                    q.options.forEach((_, optIndex) => {
+                      delete updatedFormData[`${q.name}_priority_${optIndex}`];
+                    });
+                    setFormData(updatedFormData);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
             </div>
           ))}
 
@@ -282,7 +345,7 @@ const SurveyPage: React.FC = () => {
                 }}
               >
                 <img
-                  src="/captcha.png"
+                  src={captchaImage}
                   alt="Refresh Captcha"
                   style={{
                     width: "40px", // Resetting to your original size (40px)
