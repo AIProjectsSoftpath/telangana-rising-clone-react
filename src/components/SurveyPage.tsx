@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import captchaImage from "/captcha.png"; // Adjust the path as necessary
-
+import resetIcon from "/reset_icon.png"; // Adjust the path as necessary
 const SurveyPage: React.FC = () => {
   const [captchaInput, setCaptchaInput] = useState("");
   const [captcha, setCaptcha] = useState(generateCaptcha());
@@ -49,14 +49,6 @@ const SurveyPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // ✅ Phone validation
-    if (!formData.phone || formData.phone.length !== 10) {
-      setModalMessage("Please enter a valid 10-digit mobile number.");
-      setIsError(true);
-      setShowModal(true);
-      return;
-    }
 
     if (captchaInput !== captcha) {
       setModalMessage("Captcha does not match! Please try again.");
@@ -190,33 +182,6 @@ const SurveyPage: React.FC = () => {
         <h2 className="text-center mb-4 text-primary display-4 fw-bold">
           Public Survey: Telangana Rising 2047
         </h2>
-        {/* Phone Number Input */}
-        {/* Phone Number Input */}
-        <div className="mb-4 p-3 bg-white rounded shadow-sm">
-          <label className="fw-bold mb-2">Phone Number:</label>
-          <div className="input-group" style={{ maxWidth: "250px" }}>
-            <span className="input-group-text">+91</span>
-            <input
-              type="text"
-              className="form-control"
-              name="phone"
-              placeholder="10-digit number"
-              value={formData.phone || ""}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ""); // only digits
-                if (value.length <= 10) {
-                  setFormData({ ...formData, phone: value });
-                }
-              }}
-              required
-            />
-          </div>
-          {formData.phone && formData.phone.length !== 10 && (
-            <small className="text-danger">
-              Mobile number must be 10 digits
-            </small>
-          )}
-        </div>
 
         <form onSubmit={handleSubmit}>
           {questions.map((q, idx) => (
@@ -227,28 +192,24 @@ const SurveyPage: React.FC = () => {
 
               {q.options.map((opt, optIndex) => {
                 const questionName = q.name;
-                const priorities = Array.from(
-                  { length: q.options.length },
-                  (_, i) => i + 1
-                );
+                const priorities = [1, 2, 3];
                 const usedPriorities = getUsedPriorities(questionName);
-
-                // ✅ Generate letter A, B, C, ...
                 const optionLetter = String.fromCharCode(65 + optIndex);
 
                 return (
                   <div
                     key={opt}
-                    className="d-flex align-items-center justify-content-between mb-2"
+                    className="d-flex align-items-center justify-content-between py-2 border-bottom" // ✅ Added separator
                   >
+                    {/* Answer text */}
                     <div className="d-flex align-items-center">
                       <span className="fw-bold me-2">{optionLetter}.</span>
                       <label className="form-check-label">{opt}</label>
                     </div>
 
-                    {/* Priority Dropdown */}
+                    {/* Priority Dropdown (moved closer) */}
                     <select
-                      className="form-select form-select-sm w-auto ms-3"
+                      className="form-select form-select-sm w-auto ms-1" // reduced margin
                       name={`${questionName}_priority_${optIndex}`}
                       value={
                         formData[`${questionName}_priority_${optIndex}`] || ""
@@ -282,7 +243,8 @@ const SurveyPage: React.FC = () => {
               <div className="text-end mt-2">
                 <button
                   type="button"
-                  className="btn btn-sm btn-primary"
+                  className="btn btn-sm btn-light border-0 p-0"
+                  title="Reset Priorities"
                   onClick={() => {
                     const updatedFormData = { ...formData };
                     q.options.forEach((_, optIndex) => {
@@ -290,8 +252,17 @@ const SurveyPage: React.FC = () => {
                     });
                     setFormData(updatedFormData);
                   }}
+                  style={{ cursor: "pointer" }}
                 >
-                  Reset
+                  <img
+                    src={resetIcon} // ✅ use your public folder image
+                    alt="Reset"
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      objectFit: "contain",
+                    }}
+                  />
                 </button>
               </div>
             </div>
